@@ -262,7 +262,9 @@ if __name__ == '__main__':
     parser.add_argument('--save-epoch-freq', type=int, default=1)
     parser.add_argument('--save-path', type=str, default='./media/data2/chenjiarong/saved-model/MobileNetV3')
     parser.add_argument('-save', default=False, action='store_true', help='save model or not')
-    parser.add_argument('--resume', type=str, default='', help='For training from one checkpoint')
+    parser.add_argument('--resume', type=str, \
+                        default=r"C:\develop\ESG\MobileNetV3\media\data2\chenjiarong\saved-model\MobileNetV3\MobileNetV3-large-tableware-wm1.0-dp0.2-lr0.01-bs256-ed0.0-ls0.0-sgd6e-05-bn0.1-epochs100-seedNone-determinFalse-NoBiasDecayFalse-zeroGammaFalse-mixupFalse-cos5&0.0\epoch_98.pth", \
+                            help='For training from one checkpoint')
     parser.add_argument('--start-epoch', type=int, default=0, help='Corresponding to the epoch of resume')
     parser.add_argument('--ema-decay', type=float, default=0.9999, help='The decay of exponential moving average ')
     parser.add_argument('--dataset', type=str, default='ImageNet', help='The dataset to be trained')
