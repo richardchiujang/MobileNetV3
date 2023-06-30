@@ -1,5 +1,6 @@
 from enum import Enum
 import torch
+import torch.distributed as dist
 
 class Summary(Enum):
     NONE = 0
@@ -98,4 +99,5 @@ def accuracy(output, target, topk=(1,)):
 
 
 if __name__ == '__main__':
-    main()
+    pass
+    # main()

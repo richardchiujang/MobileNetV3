@@ -127,9 +127,37 @@ def SVHNDataLoader(args):
     
     return dataloders
 
+def TablewareDataLoader(args):
+    # data transform
+    data_transforms = {
+        'train': transforms.Compose([
+            transforms.RandomRotation(15),
+            transforms.Resize([224,224]),
+            # transforms.RandomResizedCrop(224),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.6771, 0.6447, 0.6065], [0.2182, 0.2205, 0.2335])
+        ]),
+        'val': transforms.Compose([
+            transforms.Resize([224,224]),
+            # transforms.Resize([256,256]),
+            # transforms.CenterCrop(224),
+            transforms.ToTensor(),
+            transforms.Normalize([0.6771, 0.6447, 0.6065], [0.2182, 0.2205, 0.2335])
+        ]),
+    }
+    image_datasets = {}
+    image_datasets['train'] = datasets.ImageFolder(root=os.path.join(args.data_dir, 'BYO Tableware'), transform=data_transforms['train'])
+    image_datasets['val'] = datasets.ImageFolder(root=os.path.join(args.data_dir, 'BYO Tableware'), transform=data_transforms['val'])
+    
+    dataloders = {x: torch.utils.data.DataLoader(image_datasets[x], batch_size=args.batch_size, shuffle=True if x == 'train' else False,
+                    num_workers=args.num_workers, pin_memory=True) for x in ['train', 'val']}
+
+    return dataloders    
+
 def dataloaders(args):
     dataset = args.dataset.lower()
-    assert dataset in ['imagenet', 'tinyimagenet', 'cifar10', 'cifar100', 'svhn']
+    assert dataset in ['imagenet', 'tinyimagenet', 'cifar10', 'cifar100', 'svhn', 'tableware']
     if dataset == 'imagenet':
         return ImageNetDataLoader(args)
     elif dataset == 'tinyimagenet':
@@ -140,3 +168,5 @@ def dataloaders(args):
         return Cifar100DataLoader(args)
     elif dataset == 'svhn':
         return SVHNDataLoader(args)
+    elif dataset == 'tableware':
+        return TablewareDataLoader(args)

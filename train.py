@@ -45,7 +45,8 @@ def train(args, model, dataloader, loader_len, criterion, optimizer, scheduler, 
     data_time = AverageMeter('Data', ':6.3f')
     losses = AverageMeter('Loss', ':.4e')
     top1 = AverageMeter('Acc@1', ':6.2f')
-    top5 = AverageMeter('Acc@5', ':6.2f')
+    # top5 = AverageMeter('Acc@5', ':6.2f')
+    top5 = AverageMeter('Acc@1', ':6.2f')
     progress = ProgressMeter(
         loader_len,
         [batch_time, data_time, losses, top1, top5],
@@ -83,7 +84,8 @@ def train(args, model, dataloader, loader_len, criterion, optimizer, scheduler, 
             outputs = model(inputs)
             loss = criterion(outputs, labels)
             # measure accuracy and record loss
-            acc1, acc5 = accuracy(outputs, labels, topk=(1, 5))
+            # acc1, acc5 = accuracy(outputs, labels, topk=(1, 5))
+            acc1, acc5 = accuracy(outputs, labels, topk=(1, 2))
         
         # zero the parameter gradients
         optimizer.zero_grad()
@@ -169,7 +171,7 @@ def validate(args, model, dataloader, loader_len, criterion, use_gpu, epoch, ema
             loss = criterion(outputs, labels)
             
             # measure accuracy and record loss
-            acc1, acc5 = accuracy(outputs, labels, topk=(1, 5))
+            acc1, acc5 = accuracy(outputs, labels, topk=(1, 2))
             losses.update(loss.item(), inputs.size(0))
             top1.update(acc1[0], inputs.size(0))
             top5.update(acc5[0], inputs.size(0))
@@ -252,11 +254,11 @@ if __name__ == '__main__':
     # Root catalog of images
     parser.add_argument('--data-dir', type=str, default='./media/data2/chenjiarong/ImageData')
     parser.add_argument('--batch-size', type=int, default=256)
-    parser.add_argument('--num-epochs', type=int, default=150)
-    parser.add_argument('--lr', type=float, default=0.1)
+    parser.add_argument('--num-epochs', type=int, default=50)
+    parser.add_argument('--lr', type=float, default=0.01)
     parser.add_argument('--num-workers', type=int, default=4)
     #parser.add_argument('--gpus', type=str, default='0')
-    parser.add_argument('--print-freq', type=int, default=1000)
+    parser.add_argument('--print-freq', type=int, default=100)
     parser.add_argument('--save-epoch-freq', type=int, default=1)
     parser.add_argument('--save-path', type=str, default='./media/data2/chenjiarong/saved-model/MobileNetV3')
     parser.add_argument('-save', default=False, action='store_true', help='save model or not')
@@ -368,6 +370,9 @@ if __name__ == '__main__':
     elif args.dataset == 'cifar10' or args.dataset == 'svhn':
         input_size = 32
         num_class = 10
+    elif args.dataset == 'tableware':
+        input_size = 224
+        num_class = 2
     
     # get model
     model = MobileNetV3(mode=args.mode, classes_num=num_class, input_size=input_size, 
