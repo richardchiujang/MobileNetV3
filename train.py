@@ -4,6 +4,8 @@
 Train the model
 Ref: https://pytorch.org/tutorials/beginner/transfer_learning_tutorial.html
 '''
+import os
+os.environ['CUDA_VISIBLE_DEVICES']='0'
 
 import torch
 import torch.nn as nn
@@ -11,7 +13,7 @@ import torch.optim as optim
 from torch.optim import lr_scheduler
 from torch.autograd import Variable
 import time
-import os
+# import os
 from mobileNetV3 import MobileNetV3
 import argparse
 import copy
@@ -24,6 +26,7 @@ from LabelSmoothing import LabelSmoothingLoss
 from ResultWriter import ResultWriter
 from CosineLR import *
 from Mixup import mixup_data, mixup_criterion
+from AverageMeter import AverageMeter, ProgressMeter, accuracy
 
 def train(args, model, dataloader, loader_len, criterion, optimizer, scheduler, use_gpu, epoch, ema=None, save_file_name='train.csv'):
     '''
@@ -247,7 +250,7 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='PyTorch implementation of MobileNetV3')
     # Root catalog of images
-    parser.add_argument('--data-dir', type=str, default='/media/data2/chenjiarong/ImageData')
+    parser.add_argument('--data-dir', type=str, default='./media/data2/chenjiarong/ImageData')
     parser.add_argument('--batch-size', type=int, default=256)
     parser.add_argument('--num-epochs', type=int, default=150)
     parser.add_argument('--lr', type=float, default=0.1)
@@ -255,7 +258,7 @@ if __name__ == '__main__':
     #parser.add_argument('--gpus', type=str, default='0')
     parser.add_argument('--print-freq', type=int, default=1000)
     parser.add_argument('--save-epoch-freq', type=int, default=1)
-    parser.add_argument('--save-path', type=str, default='/media/data2/chenjiarong/saved-model/MobileNetV3')
+    parser.add_argument('--save-path', type=str, default='./media/data2/chenjiarong/saved-model/MobileNetV3')
     parser.add_argument('-save', default=False, action='store_true', help='save model or not')
     parser.add_argument('--resume', type=str, default='', help='For training from one checkpoint')
     parser.add_argument('--start-epoch', type=int, default=0, help='Corresponding to the epoch of resume')
