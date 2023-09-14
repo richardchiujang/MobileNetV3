@@ -4,9 +4,35 @@ set CUDA_VISIBLE_DEVICES="0" & python train.py --batch-size=128 --mode=large --p
 
 python train.py --batch-size=512 --mode=small --print-freq=100 --dataset=CIFAR10 --ema-decay=0 --label-smoothing=0 --lr=0.35 --save-epoch-freq=2 --lr-decay=cos --lr-min=0 --warmup-epochs=5 --weight-decay=6e-5 --num-epochs=10 --num-workers=12 --width-multiplier=1
 
+
+
+###############################################
+需要調整的地方 
+"C:\develop\ESG\MobileNetV3\DataLoader.py"  兩處
+
+def BagDataLoader(args):
+
+elif dataset == 'bag':
+    return BagDataLoader(args)
+
+"C:\develop\ESG\MobileNetV3\train.py"  兩處 
+
+elif args.dataset == 'bag':
+	
+# parser.add_argument('--resume', type=str, \	
+###############################################
+conda activate mobilenetv3
+cd C:\develop\ESG\MobileNetV3
+
+
 python train.py --batch-size=256 --mode=large --print-freq=100 --dataset=Tableware --ema-decay=0 --label-smoothing=0 --lr=0.35 --save-epoch-freq=2 --lr-decay=cos --lr-min=0 --warmup-epochs=5 --weight-decay=6e-5 --num-epochs=10 --num-workers=12 --width-multiplier=1 
 
 python train.py --batch-size=256 --mode=large --print-freq=100 --dataset=Tableware --ema-decay=0 --label-smoothing=0 --lr=0.01 --save-epoch-freq=2 --lr-decay=cos --lr-min=0 --warmup-epochs=5 --weight-decay=6e-5 --num-epochs=100 --num-workers=12 --width-multiplier=1
+
+python train.py --batch-size=32 --mode=large --print-freq=100 --dataset=meatless --ema-decay=0 --label-smoothing=0 --lr=0.01 --save-epoch-freq=2 --lr-decay=cos --lr-min=0 --warmup-epochs=5 --weight-decay=6e-5 --num-epochs=100 --num-workers=12 --width-multiplier=1
+
+python train.py --batch-size=32 --mode=large --print-freq=100 --dataset=bag --ema-decay=0 --label-smoothing=0 --lr=0.01 --save-epoch-freq=2 --lr-decay=cos --lr-min=0 --warmup-epochs=5 --weight-decay=6e-5 --num-epochs=100 --num-workers=12 --width-multiplier=1
+
 
 https://github.com/richardchiujang/MobileNetV3.git
 
